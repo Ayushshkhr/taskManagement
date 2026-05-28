@@ -59,13 +59,23 @@ export default function Dashboard() {
     fetchTasks();
   }, [search, status, page]);
 
+const isValidTaskTitle = (title) => {
+  if (!title || title.trim().length < 3) return false;
+  const cleanTitle = title.trim();
+  const wordRegex = /[A-Za-z]{3,}/;
+  const meaningfulChars = cleanTitle.replace(/[^A-Za-z]/g, "");
+  return wordRegex.test(cleanTitle) && meaningfulChars.length >= 3;
+};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
 
-    if (!formData.title.trim()) {
-      return setMessage("Task title is required");
-    }
+  if (!isValidTaskTitle(formData.title)) {
+  return setMessage(
+    "Task title must contain a meaningful word with at least 3 letters"
+  );
+}
 
     try {
       if (editingId) {

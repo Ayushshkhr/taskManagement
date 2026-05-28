@@ -33,6 +33,12 @@ export default function Login() {
       return setError("Email and password are required");
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+
+    if (!emailRegex.test(formData.email)) {
+      return setError("Please enter a valid email address");
+    }
+
     try {
       setLoading(true);
       const res = await API.post("/auth/login", formData);
@@ -51,7 +57,8 @@ export default function Login() {
   return (
     <main className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 via-sky-50 to-slate-100">
       {" "}
-      <section className="w-full max-w-md bg-white/90 backdrop-bg-gradient-to-br from-sky-50 via-white to-indigo-100blur rounded-3xl shadow-xl border border-white/70 p-8">
+      <section className="w-full max-w-md bg-white/90 backdrop-blur rounded-3xl shadow-xl border border-white/70 p-8">
+        {" "}
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className="h-12 w-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
             <FiCheckCircle size={24} />
@@ -61,21 +68,18 @@ export default function Login() {
             <p className="text-xs text-slate-500">Smart task management</p>
           </div>
         </div>
-
         <h1 className="text-3xl font-bold text-center text-slate-900">
           Welcome back
         </h1>
         <p className="text-slate-500 mt-2 text-center">
           Login to manage your daily tasks.
         </p>
-
         {error && (
           <div className="mt-5 flex gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
             <FiAlertCircle className="mt-0.5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
-
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div className="relative">
             <FiMail className="absolute left-4 top-4 text-slate-400" />
@@ -115,7 +119,6 @@ export default function Login() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-
         <p className="text-sm text-slate-600 mt-6 text-center">
           New here?{" "}
           <Link href="/register" className="text-blue-600 font-semibold">

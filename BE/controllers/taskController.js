@@ -1,4 +1,5 @@
 const Task = require("../models/task");
+const { isValidTaskTitle } = require("../utils/validators");
 
 const getTasks = async (req, res) => {
   try {
@@ -37,12 +38,14 @@ const createTask = async (req, res) => {
   try {
     const { title, description } = req.body;
 
-    if (!title) {
-      return res.status(400).json({ message: "Task title is required" });
+    if (!isValidTaskTitle(title)) {
+      return res.status(400).json({
+        message: "Task title must contain a meaningful word with at least 3 letters",
+      });
     }
 
     const task = await Task.create({
-      title,
+      title: title.trim(),
       description,
       userId: req.user._id,
     });
@@ -55,6 +58,14 @@ const createTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
   try {
+    const { title, description } = req.body;
+
+    if (title !== undefined && !isValidTaskTitle(title)) {
+      return res.status(400).json({
+        message: "Task title must contain a meaningful word with at least 3 letters",
+      });
+    }
+
     const task = await Task.findOne({
       _id: req.params.id,
       userId: req.user._id,
@@ -64,8 +75,8 @@ const updateTask = async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    task.title = req.body.title || task.title;
-    task.description = req.body.description ?? task.description;
+    if (title !== undefined) task.title = title.trim();
+    if (description !== undefined) task.description = description;
 
     const updatedTask = await task.save();
 

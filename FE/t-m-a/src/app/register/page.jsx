@@ -38,9 +38,17 @@ export default function Register() {
     if (!formData.name || !formData.email || !formData.password) {
       return setError("All fields are required");
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#^_-]).{7,}$/;
 
-    if (formData.password.length < 6) {
-      return setError("Password must be at least 6 characters");
+    if (!emailRegex.test(formData.email)) {
+      return setError("Please enter a valid email address");
+    }
+
+    if (!passwordRegex.test(formData.password)) {
+      return setError(
+        "Password must be 7+ characters with 1 uppercase, 1 number, and 1 special character",
+      );
     }
 
     try {
@@ -59,7 +67,8 @@ export default function Register() {
   };
 
   return (
-<main className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 via-sky-50 to-slate-100">  <section className="w-full max-w-md bg-white/90 backdrop-blur rounded-3xl shadow-xl border border-white/70 p-8">
+    <main className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 via-sky-50 to-slate-100">
+      <section className="w-full max-w-md bg-white/90 backdrop-blur rounded-3xl shadow-xl border border-white/70 p-8">
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className="h-12 w-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
             <FiCheckCircle size={24} />
