@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "TaskFlow - Task Manager",
-  description: "MERN task management application",
+  title: "TaskFlow | MERN Task Manager",
+  description: "A secure MERN task management app with JWT authentication and CRUD operations.",
 };
 
 export default function RootLayout({ children }) {
